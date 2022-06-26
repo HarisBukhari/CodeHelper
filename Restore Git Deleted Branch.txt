@@ -1,5 +1,5 @@
-How to recove delete git branch
-open git cmd
+How to recove delete git branch 
+open git cmd (If you stuck in any query then press "Q")
 1: git reflog (past it in git cmd, it will shows the all commits DESC)
 2: locate the branch commit by ID 
 3: git checkout "ID" (it will show the branch and its files)
