@@ -94,7 +94,7 @@ async function main() {
 const movieschema = new mongoose.Schema({
     name:{
         type: String,
-        required: true,
+        required: [true,'Name cannot be blank'], //required condition with self made error string
         maxlenght: 20
     },
     year:Number,
