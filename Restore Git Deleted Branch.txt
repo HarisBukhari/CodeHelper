@@ -1,0 +1,6 @@
+How to recove delete git branch
+open git cmd
+1: git reflog (past it in git cmd, it will shows the all commits DESC)
+2: locate the branch commit by ID 
+3: git checkout "ID" (it will show the branch and its files)
+4: git checkout -b "branch name" (you can write new or old name, it will restore the branch)
