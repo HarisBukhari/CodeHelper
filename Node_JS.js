@@ -2,6 +2,13 @@
  
 ////////////////////////////////////////  Javascript ///////////
 
+//Destructuting With Defualt Values
+const A = {
+    name:undefined //works only on undefined
+}
+const {name='Hello'}=A
+console.log(name)
+
 //// Array from
 const a = Array.from('foo')
 // expected output: Array ["f", "o", "o"]
@@ -77,12 +84,6 @@ app.post('/home',(req,res)=>{
     console.log(req.body)
 })
 
-//Destructuting With Defualt Values
-const A = {
-    name:undefined //works only on undefined
-}
-const {name='Hello'}=A
-console.log(name)
 
 //////////Nodemon Issue
 //Nodemon: even if globally not found 
