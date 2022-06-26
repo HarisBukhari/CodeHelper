@@ -42,6 +42,7 @@ app.set('views',path.join(__dirname,'/views'))
 //Express Params
 app.get("/home/:name",(req,res)=>{
     const {name} = req.params
+    //const {notname='AA'} = req.params //Destructuring for default values
     res.send(`<h1>Hello User: ${name}</h1>`)
 })
 app.get("/home/:name/:place",(req,res)=>{
@@ -64,6 +65,12 @@ app.post('/home',(req,res)=>{
     console.log(req.body)
 })
 
+//Destructuting With Defualt Values
+const A = {
+    name:undefined //works only on undefined
+}
+const {name='Hello'}=A
+console.log(name)
 
 //////////Nodemon Issue
 //Nodemon: even if globally not found 
