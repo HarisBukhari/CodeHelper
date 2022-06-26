@@ -1,5 +1,17 @@
 //hammad check
  
+////////////////////////////////////////  Javascript ///////////
+
+//// Array from
+const a = Array.from('foo')
+// expected output: Array ["f", "o", "o"]
+console.log(a[0]);
+// expected output: "f"
+console.log(Array.from([1, 2, 3], x => x + x));
+// expected output: Array [2, 4, 6]
+
+
+
 ////////////////////////////////////  EXPRESS  ////////////////
 //npm i express Nodemon ejs method-override
 //npm init -y (y for quick start else remove it)
