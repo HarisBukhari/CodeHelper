@@ -69,6 +69,16 @@ app.post('/home',(req,res)=>{
 //Nodemon: even if globally not found 
 //npx Nodemon app.js or what ever sever your are trying to run
 
+//Anonymous function //Function which has no name is called Anonymous function.
+
+function complex(add) {
+  console.log(add(10, 20));
+}
+
+//anonymous function with callback
+complex(function (a, b) {
+  return a + b;
+}); 
 
 ////////////////////////////////// MONGO /////////////////////////////
 const mongoose = require('mongoose')
