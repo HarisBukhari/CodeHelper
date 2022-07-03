@@ -153,3 +153,9 @@ router.post('/',upload.array('image'),(req,res)=>{
     console.log(req.body,req.files)
     res.send("Done")
 })
+
+//For Dev Enviroment ENV Locator
+if(process.env.NODE_ENV !=="production"){
+    require('dotenv').config()
+}
+console.log(process.env.somevariable)
