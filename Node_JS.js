@@ -142,3 +142,14 @@ const obj1 = new Movie({
 })
 
 obj1.save()
+
+
+///For Multer Files Upload 
+{/* <form action="/campgrounds" method="POST" novalidate class="validated-form" enctype="multipart/form-data"> */}
+{/* <input type="file" class="form-file-input" id="image" name="image" multiple> */}
+const multer = require('multer')
+const upload = multer({ dest:'uploads/' })
+router.post('/',upload.array('image'),(req,res)=>{
+    console.log(req.body,req.files)
+    res.send("Done")
+})
