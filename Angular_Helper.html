@@ -1,0 +1,601 @@
+Bootstrap-Links{
+    css {
+        "node_modules/bootstrap/dist/css/bootstrap.min.css"
+    }
+    js {
+        "node_modules/bootstrap/dist/js/bootstrap.js"
+    }
+}
+
+Component & Data Binding {
+    Interpolation {
+        C.TS{
+            Name: string = "Zotac";
+        }
+        .html{
+            {{Name}} // Zotac
+        }
+    }
+    
+    Property Binding {
+        C.TS{
+            isDisable: boolean = false;
+        }
+        .html{
+            <button [disable] ="isDisable">Show <button>
+        }
+    }
+    
+    Event Binding {
+        C.TS{
+            show(){
+                alert("Hello");
+            }
+        }
+        .html{
+            <button (click)="show()">Show <button>
+        }
+    }
+    
+    Two Way Binding {
+        C.Module.TS {
+            imports : [FormModule]
+        }
+        C.TS{
+            Name: string = "Zotac";
+        }
+        .html{
+            <input [(ngModel)]="Name">
+            <p>Name</p>
+        }
+    }
+
+    Parent To Child Binding {
+
+        Parent {
+            .model.ts {
+                export class Person {
+                    public name: string;
+                constructor(name: string) {
+                        this.name=name;
+                    }
+                }
+            }
+            C.TS{
+                persons: Person[] = [ new Person('A Test Recipe') ]
+            }
+            .html{
+                <ng-container *ngFor="let person of persons"> <child [person]="person"></child> </ng-container>
+            }
+        }
+
+        Child {
+            C.TS{
+                import {Person} from './Model/Person'
+
+                @Input() person: Peron = {} as Person
+            }
+            .html{
+                {{person.name}} // Zotac
+            }
+        }
+
+    }
+}
+
+Child To Parent Binding {
+
+    Parent {
+        .model.ts {
+            export class Person {
+                public name: string;
+            constructor(name: string) {
+                    this.name=name;
+                }
+            }
+        }
+        C.TS{
+            persons: Person[] = [ new Person('A Test Recipe') ]
+            removeperson(person: Person){
+                persons.splice(person,1)
+            }
+        }
+        .html{
+            <ng-container *ngFor="let person of persons"> <child (removepersoninfo)="removeperson($event)" [person]="person"></child> </ng-container>
+        }
+    }
+
+    Child {
+        C.TS{
+            import {Peron} from './Model/Person'
+
+            @Input() person: Peron = {} as Person
+            @Output() removepersoninfo = new EventEmitter<Person>()
+
+            remove(){
+                this.removepersoninfo.emit(this.person)
+            }
+        }
+        .html{
+            {{person.name}} // Zotac
+            <button (click)="remove()">Remove Name</button>
+        }
+    }
+    
+}
+}
+
+Directives {
+
+    //For If Conditions
+    ngIf {
+        C.TS{
+            isDisable: boolean = false;
+        }
+        .html{
+            <ng-container *ngIf="!isDisable">show</ng-container>
+        }
+    }
+
+    ngFor {
+
+        .model.ts {
+            export class Person {
+                public name: string;
+            constructor(name: string) {
+                    this.name=name;
+                }
+            }
+        }
+        C.TS{
+            persons: Person[] = [ new Person('A Test Recipe') ]
+        }
+        .html{
+            <ng-container *ngFor="let person of persons; let i = index">{{person.name}}</ng-container>
+        }
+    }
+
+    ngStyle {
+        C.TS{
+            perosn: string = 'online'
+            getColor(){ return this.person ==='online' ? 'green' : 'red' }
+        }
+        .html{
+            <p [ngStyle]="{backgroudColor: getColor()}" >Hello World</p>
+        }
+    }
+
+    ngClass {
+        C.TS{
+            style: [`
+                .online {
+                    color: white;
+                } 
+            `]
+            perosn: string = 'online'
+        }
+        .html{
+            <p [ngClass]="{online:perosn==='online'}" >Hello World</p>
+        }
+    }
+
+}
+
+Pipes {
+    C.TS{
+        Price: string = 399;
+    }
+    .html{
+        {{Price | currency:'INR'}} // (INR symbal)399
+    }
+}
+
+Lifecycle event sequence {
+    
+    ngOnChanges(){
+        Called before ngOnInit() (if the component has bound inputs) and whenever one or more data-bound input properties change.
+    }
+
+    ngOnInit(){
+        Called once, after the first ngOnChanges(). ngOnInit() is still called even when ngOnChanges() is not (which is the case when there are no template-bound inputs).
+    }
+
+    ngDoCheck(){
+        Called immediately after ngOnChanges() on every change detection run, and immediately after ngOnInit() on the first run.
+    }
+
+    ngAfterContentInit(){
+        Called once after the first ngDoCheck().
+    }
+    ...
+    ngOnDestroy(){
+        Called immediately before Angular destroys the directive or component.
+    }
+
+}
+
+Services & Dependency injection {
+
+    CLI: ng generate service main/DataService 
+
+    DataService.service.ts {
+        getperson(){
+            return [
+                {'Zotac'},
+                {'Haris'},
+                {'Ahmad'},
+                {'Yasir'}
+            ]
+        }
+    }
+
+    .model.ts {
+        export class Person {
+            public name: string;
+        constructor(name: string) {
+                this.name=name;
+            }
+        }
+    }
+    C.TS{
+        persons: Person[] = []
+
+        constructor(private dataservice: DataService){}
+
+        ngOnInit(): void{
+            this.person = this.dataservice.getperson()
+        }
+    }
+    .html{
+        <ng-container *ngFor="let person of persons">{{person.name}}</ng-container>
+    }
+
+}
+
+Routing {
+    
+    style="cursor: pointer"
+
+    Routes{
+        app-routing.module.ts {
+            const routes: Routes = [
+                { path: '', component: TodosComponent, children:[
+                { path: 'p1', component: TodosP1Component },
+                { path: 'p2', component: TodosP2Component },
+                ] },
+                { path: 'about', component: TodosAboutComponent },
+                { path: 'pricing', component: TodosPricingComponent },
+                { path: 'not-found', component: notFoundComponent },
+                { path: '**', component: redirectTo: '/not-found' },
+            ]
+        }
+        //   { path: '', redirectTo: '/some-page', pathMatch: 'full' } //pathMatch: only redirect if full path is empty
+
+
+        .html {
+            <li routerLinkActive="active"> <a routerLink="/">Navbar</a> </li> //routerLinkActive: to make it active by router and ="active" is a Bootstrap class which is active when link is active
+            <li routerLinkActive="active"> <a routerLink="/abourt">about</a> </li>
+            <li routerLinkActive="active"> <a routerLink="/pricing">pricing</a> </li>
+
+            //toggles between the given paths
+            <router-outlet></router-outlet>
+        }
+
+    }
+
+    Route Navigate {
+
+        app-routing.module.ts {
+            const routes: Routes = [
+                { path: '', component: AppComponent },
+                { path: 'user/about', component: UserComponent }
+            ]
+        }
+
+        C.ts {
+            
+            constructor(private router: Router, private route: ActivateRoute, private Data: DATAService) { }
+
+            onSubmit() {
+            if(this.obj.email==""&&this.obj.password==""){
+              this.obj.email = "HarisBukhari@gmail.com"
+              this.obj.password="monkey" 
+            }
+            this.Data.login(this.obj).subscribe((res)=>{
+            this.router.navigate(['']);
+            //if need to add relative path
+            this.router.navigate(['about'], {relativeTo: this.route}); //(user/)this.route current route
+            })
+
+        }
+    }
+
+    Route Prams {
+
+        app-routing.module.ts {
+            const routes: Routes = [
+                { path: 'user/:id/:name', component: UserComponent }
+            ]
+        }
+
+        C.ts {
+            user: { id: number, name: string }
+            constructor(private route: ActivateRoute) { }
+            
+            ngOnInit(){
+                this.user = {
+                    id: this.route.snapshot.params['id'],
+                    name: this.route.snapshot.params['name']
+                }
+
+                //For Async otherwise this link on same page will not update itself unless reInit and you can Unsubcribe Obersvable by Unsubcribe() in ngOnDestroy
+                this.route.params
+                .subcribe( 
+                    (params: Params) => {
+                        this.user.id=params['id'];
+                        this.user.name=params['name'];
+                    }
+                )
+            }
+
+        }
+        .html {
+            <a [routerLink]="['/user',10,'Zotac']">check-self</a>
+            <p>{{user.id}} -- {{user.name}}</p>
+        }
+    }
+
+    Route Query Params {
+
+        app-routing.module.ts {
+            const routes: Routes = [
+                { path: 'user/:id/edit', component: UserComponent }
+            ]
+        }
+        C.ts {
+            user: { id: number, name: string }
+            isAllowed = false
+            constructor(private router: Router,private route: ActivateRoute) { }
+
+            ngOnInit(){
+                this.route.queryParams
+                .subcribe( 
+                    (queryParams: Params) => {
+                        this.isAllowed = queryParams['any'] === '1' ? true : false
+                    }
+                )
+            }
+
+            onReq(id: number){
+                this.router,navigate(['/user/',id,'edit'],{queryParams: {any: '1'}})
+
+                //this.router.navigate(['about'], {relativeTo: this.route}); //(user/)this.route current route
+                //this.router.navigate(['about'], {relativeTo: this.route, queryParamsHandling: 'preserve'}); //queryParamsHandling store the current link to used the query on unrelated route
+            }
+        }
+
+        .html {
+            <a [routerLink]="['/user',10,'Zotac']" [queryParams]="{any:'anyval'}">check-self</a>
+            //Conditional Params [queryParams]="{any:user.id === 3 ? '1' : '0'}
+            <button (click)="onReq(1)"></button>
+            <ng-container *ngFor="let user of users"></ng-container>
+        }
+        Other C.ts {
+            constructor(private route: ActivateRoute) { }
+            ngOnInit(){
+                this.route.queryParams.subscribe()
+            }
+        }
+    }
+
+    Custom Error Page {
+
+        app-routing.module.ts {
+            const routes: Routes = [
+                { path: 'not-found', component: ErrorComponent , data: {message: 'Page not Found'}}
+            ]
+        }
+        Error C.ts {
+            ErrorMessage: string
+            constructor(private route: ActivateRoute) { }
+
+        }
+
+        ngOnInit(){
+            this.ErrorMessage = this.route.snapshot.data['message']
+            this.route.data.subcribe(
+                (data: Data)=>{               //Data can be imported
+                    this.ErrorMessage = data['message']
+                }
+            )
+        }
+
+        Error C.html {
+            <p> {{ErrorMessage}} </p>
+        }
+
+    }
+
+} 
+
+Custom Module {
+    some feature are not available to inner componet so you need to create inner component module and register the feature there and than register the module to main/app.module
+}
+
+Form {
+
+    //for form submit
+    .html {
+        <form (ngSubmit)="onSubmit()">
+            //for validation
+            <input [(ngModel)]="Name" #name = "ngModel" name="name" required >
+            <p *ngIf="name.invalid && (name.dirty || name.touched)">Name Field Must Be Valid</p>
+        </form>
+    }
+    C.ts {
+        constructor( private router: Router ) { }
+        onSubmit(){ this.router.navigate(['']); }
+        optionforsomefromCts='a'                                                                         <--
+        genders=['male','female']                                                                         <--
+    }
+
+    ^Udemy^
+    //validation + style
+    .html {
+        <form (ngSubmit)="onSubmit(form)" #form="ngForm">
+            <input ngModel type="text" name="name" required #name="ngModel">                              ^
+            <p *ngIf="!name.valid && name.touched">Please Enter Vaild Name</p>                            |
+            <input ngModel type="text" name="password" required #password="ngModel">                      |
+            <p *ngIf="!password.valid && password.touched">Please Enter Vaild Password</p>
+            <input ngModel type="email" name="email" email required #email="ngModel">
+            <p *ngIf="!email.valid && email.touched">Please Enter Vaild Email</p>
+            <button [disabled]="!form.valid">submit</button>
+            <select name="some" id="some" [ngModel]="optionforsomefromCts"> // follow error  ------------->  
+                <option value="a">1</option>
+                <option value="b">2</option>
+            </select>
+            <div class="radio" *ngFor="let gender of genders">
+                <label>
+                    <input type="radio" name="gender" ngModel [value]="gender" required>
+                    {{gender}}
+                </label>
+            </div>
+        </form>
+
+    }
+    .css{
+        input.ng-invalid.ng-touched {
+            border: 1px solid red
+        }
+        input.ng-valid {
+            border: 1px solid green 
+        }
+    }
+    C.ts {
+        onSubmit(form: NgForm){ 
+            console.log(form.value)
+        }
+    }
+
+}
+
+Obervable {
+
+    Subject {
+
+        Service.ts {
+            import {Subject} from 'rxjs'
+            S.C {
+                someevent = new Subject<boolean>()
+            }
+        }
+
+        Button.C.ts {
+            constructor(Service)
+            onactive(){
+                this.Service.someevent.next("true")
+            }
+        }
+        
+        Button.C.html {
+            <button (click)="onactive()">Click Me</button>
+        }
+
+        show.C.ts {
+            isactive = false
+            private thissub: Subcription    //import it
+            constructor(Service)
+            ngOnInit(){
+                this.Service.someevent.subcribe(res=>{
+                    this.isactive=res
+                })
+            }
+            ngOnDestroy(){
+                this.sub.unsubcribe()
+            }
+        }
+        
+    }
+
+    C. ts {
+        private observerSubcription: Subcription      //import it
+        ngOnInit(){
+            myObersvable = new Obersvable ((oberver)=>{
+                console.log('Obersvable starts')
+                let count = 0
+                setInterval(()=>{
+                    oberver.next(count)
+                    //if error happens than complete will not gonna happens even you handle the error
+                    //E//Creating A Error for handling error 
+                    if(count>3){
+                        oberver.error(new Error('Some Error just happens'))
+                    }
+                    //E//
+                    //C//Creating A Complete Event Emmit the Event
+                    if(count===2){
+                        oberver.complete()
+                    }
+                    //C//
+                    count++
+                },1000)
+            })
+        }
+        myObservable.subscribe((val)=>{   //the parameters (next,error,complete)
+            console.log(val)
+        })
+        
+        // to unsub the subcription first assign it to sub variable and in ngOnDestroy you can unsub it
+        this.observerSubcription = myObservable.subscribe((val)=>{ like above })
+        
+        //Error and Complete
+        this.observerSubcription = myObservable.subscribe(
+            (val)=>{ console.log(val) } //Data
+            (error)=>{ console.log(error)}, //Error
+            ()=>{console.log("Completed")} //Complete with no Args
+            )
+
+        ngOnDestroy(){
+            this.observerSubcription.unsubcribe()
+        }
+    }
+}
+
+Route Guard {
+    
+    CLI {
+    ng generate guard auth/auth ^ (CanActivate)option
+    }
+    
+    Rounting routes {
+        { path: '', component: MainComponent, canActive: [AuthGuard]}
+    }
+
+    auth.guard.ts {
+        constructor(private authservice: AuthService){}
+
+        canActive (){
+            return this.authservice.isAuthenticated
+        }
+    }
+
+}
+
+
+HTTP {
+    app.module.ts {
+        imports : [
+        HttpClientModule
+        ]
+    }
+    Service.ts {
+        constructor(private http: HttpClient){}
+        const headers = new HttpHeaders({'anyAuth':'token'})
+
+        onSubmit(data : any){
+            this.http.post('URL',data,{headers:headers})
+            .subcribe((res)=>{          //.subcribe otherwise will no execute
+                console.log(res)
+            })
+        }
+    }
+}
