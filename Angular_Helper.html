@@ -81,6 +81,46 @@ Component & Data Binding {
         }
 
     }
+
+    @ViewChild {
+        //Use of view child for local element and component
+        Parent.C.html {
+            <div>
+                <label> Date of Birth</label>
+                //add input #ref and meth whenever it become BLUR ((blur) is a event type like (click))
+                <input type="date" #dobInput (blur)="findAge()">
+
+                <label>Age: </label>
+                <input type="text" #ageInput>
+            </div>
+            //Call Child Component via ViewChild
+            <app-child></app-child> //the child Component
+            {{child.show()}}
+        }
+        Parent.C.ts {
+            @ViewChild('dobInput') dob: ElementRef
+            @ViewChild('ageInput') age: ElementRef
+            @ViewChild('app-child', {static:true}) child: app-child    //app-child is COMPONENT SELECTOR and Also import the component
+            //@ViewChild('form') myform: NgForm | any; //This is not part of this Example! Use any when TS not happy. 
+            //myform.setValue({add all properties}) can use it to add and replace data.
+            //myform.setPatch({add only properties want update}) can use it to update with less properties but code did not work.
+
+            findAge(){
+                let BrthYear = new Date(this.dob.nativeElement.value).getFullYear()
+                let CurrentYear = new Date().getFullYear()
+                let agenow = CurrentYear - BrthYear'
+                this.age.nativeElement.value = agenow
+            }
+        }
+        child.C.ts{
+            show(){
+                console.log("Hello From Child")
+            }
+        }
+        child.html{
+            <p>hi</p>
+        }
+    }// Output is Age and "hi" from Child Component and " from child" in console
 }
 
 Child To Parent Binding {
@@ -423,7 +463,7 @@ Custom Module {
 }
 
 Form {
-
+    Use # like (#form="ngForm") for control, validation ....etc
     //for form submit
     .html {
         <form (ngSubmit)="onSubmit()">
@@ -473,7 +513,19 @@ Form {
     }
     C.ts {
         onSubmit(form: NgForm){ 
-            console.log(form.value)
+            console.log(form.value) //values as object
+        }
+    }
+
+    // to use info as group by using local ref #
+    Form Group {    
+        .html {
+        <form ngModelGroup="anyname" #anyname="ngModelGroup" (ngSubmit)="onSubmit(form)" >
+            <input>
+            <input>
+            <input>
+            <p *ngIf="anyname.invalid && anyname.touched">Please Enter Valid Data</p>
+        </form>
         }
     }
 
