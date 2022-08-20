@@ -207,7 +207,7 @@ Directives {
             persons: Person[] = [ new Person('A Test Recipe') ]
         }
         .html{
-            <ng-container *ngFor="let person of persons; let i = index">{{person.name}}</ng-container>
+            <ng-container *ngFor="let person of persons; let i = index/index as i">{{person.name}}</ng-container>
         }
     }
 
@@ -479,6 +479,9 @@ Custom Module {
 }
 
 Form {
+
+    <!-- /////////////////////// Template Driven Form //////////////////// -->
+
     Use # like (#form="ngForm") for control, validation ....etc
     //for form submit
     .html {
@@ -530,9 +533,15 @@ Form {
     C.ts {
         onSubmit(form: NgForm){ 
             console.log(form.value) //values as object
+            <!-- setValue() & patchValue() If needed -->
+            this.myform.setValue({
+                name: 'HHH',
+                email: this.myform.value.email,
+                password: this.myform.value.password
+              })
         }
     }
-    //Reactive Form
+    
     // to use info as group by using local ref #
     Form Group {    
         .html {
@@ -543,6 +552,121 @@ Form {
             <p *ngIf="anyname.invalid && anyname.touched">Please Enter Valid Data</p>
         </form>
         }
+    }
+
+    <!-- /////////////////////         Reactive Form   ///////////////////////// -->
+    //Did not need reference like Template Driven form 
+
+    app.module.ts {
+        import :[
+        ReactiveFormmsModule
+        ]
+    }
+
+    C.ts {
+
+        import {FormControl,FormGroup,Validators} from '@angular/forms'
+
+        ReactiveForm: FormGroup;
+        formStatus; //Yeah youtube did not mention anything
+
+        ngOnInit(){
+            this.ReactiveFrom = new FormGroup ({
+                // For Internal Group otherwise remove group make it simple
+                Details: new FormGroup ({
+                    firstname: new FormControl(null,Validators.required),
+                    lastname: new FormControl(null,Validators.required),
+                    email: new FormControl(null,[Validators.required,Validators.email],this.emailNotAllowed),
+                }),
+                gender: new FormControl('male'),      //value for default
+
+                <!-- // FormArray To Add runtime inputfield formcontrol is just like field -->
+                skills: new FormArray ([
+                    new FormControl(null,Validators.required)
+                ])
+            })
+        }
+        onSubmit(){
+            console.log(this.ReactiveFrom) //Full Object. find value Property
+        } 
+
+        addskill(){
+            (<FormArray>this.ReactiveFrom.get('skills')).push(new FormControl(null,Validators.required))
+        }
+
+        <!-- //Custom Async Validator -->
+        emailNotAllowed(control: FormControl): Promise<any> | Obersvable<any>{
+            const responce = new Promise ((resolve,reject)=>{
+                setTimeout (()=>{
+                    if(control.value === 'zotac@gmail.com'){    //match any from database than reject it
+                        resolve({emailNotAllowed:true})
+                    }else {
+                        resolve(null)
+                    }
+                }, 5000)
+            })
+            return responce
+        }
+        <!-- FormStatus -->
+        this.ReactiveFrom.statusChanges.subcribe(val)=>{
+            this.formStatus = value
+        }
+
+        <!-- setValue() & patchValue() add in method to run by click or whatever -->
+        this.ReactiveFrom.setValue({
+            same properties as mention in form
+        })
+        this.ReactiveFrom.patchValue({
+            add only Property you want to update
+        })
+            <!-- or do this to achieve both -->
+            this.ReactiveFrom.setValue({
+                name: 'HHH',
+                email: this.ReactiveFrom.get('email'),
+                password: this.ReactiveFrom.get('password')
+              })
+            <!--  -->
+
+    }
+    .css {
+        input.ng-invalid.ng-touched{
+            border: 1px solid red;
+        }
+        <!-- //Status validation -->
+        .myFormValidationColor.INVALID {
+            border: red 1px solid;
+            box-shadow: 0 0 31px rgba(255,0,0,0.7) !important;
+        }
+        .myFormValidationColor.PENDING {
+            border: red 1px solid;
+            box-shadow: 0 0 31px rgba(255,235,0,0.7) !important;
+        }
+        .myFormValidationColor.VALID {
+            border: red 1px solid;
+            box-shadow: 0 0 31px rgba(78,233,84,0.7) !important;
+        }
+    }
+    .html {
+        <form class="myFormValidationColor" [formGroup]="reactiveForm" [ngClass]="formStatus" (ngSubmit)="onSubmit()">
+            // For Internal Group otherwise remove group make it simple
+            <div formGroupName="Details">
+                <input formControlName="firstname">
+                <input formControlName="lastname">
+                <input formControlName="email">
+                <p *ngIf="!reactiveForm.get('Details.email').valid && reactiveForm.get('Details.email').touched">This Email is not Valid</p>
+            </div>
+            <input type="radio" formControlName="gender"> //male
+            <input type="radio" formControlName="gender"> //female
+            <input type="radio" formControlName="gender"> //other
+
+            <div formArrayName="skills">
+                <ng-container *ngFor="let skill of ReactiveFrom.get('skills')['controls']; index as i">
+                    <input type="text" formControlName="{{i}}">
+                </ng-container>
+                <button (click)="addskill()">Add More Skills</button>
+            </div>
+            <button type="submit"></button>
+        </form>
     }
 
 }
