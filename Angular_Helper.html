@@ -1,3 +1,6 @@
+
+
+<!-- //////////////////////////// init Setup ////////////////////////////////////////////////// -->
 Bootstrap-Links{
     css {
         "node_modules/bootstrap/dist/css/bootstrap.min.css"
@@ -6,6 +9,19 @@ Bootstrap-Links{
         "node_modules/bootstrap/dist/js/bootstrap.js"
     }
 }
+
+
+<!-- For Strict Angular rule -->
+<!-- tsconfig.json -->
+{
+    "strict": false,
+}
+"angularCompilerOptions": {
+    "strictPropertyInitialization": false
+}
+
+
+<!-- /////////////////////////////////////////////////////////////////////////////////////////////// Code Helper ////////////////////////////////////////////////////////////////////// -->
 
 Component & Data Binding {
     Interpolation {
@@ -516,7 +532,7 @@ Form {
             console.log(form.value) //values as object
         }
     }
-
+    //Reactive Form
     // to use info as group by using local ref #
     Form Group {    
         .html {
