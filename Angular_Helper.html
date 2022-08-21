@@ -790,4 +790,16 @@ HTTP {
             })
         }
     }
+    <!-- /// ALl in All//////////// -->
+    check(){
+        const token = ""+localStorage.getItem('bearer')
+        console.log(token)
+        const headers = new HttpHeaders().set('Content-Type','application/json; charset=utf-8').set('Authorization', 'Bearer ' + token)
+        this.http.get('http://localhost:3000/api/v1/jobs',{'headers':headers})
+        .subscribe((res)=>{
+          console.log(res)
+        },(err)=>{
+          console.log(err)
+        }) 
+      }
 }
