@@ -673,42 +673,6 @@ Form {
 
 Obervable {
 
-    Subject {
-
-        Service.ts {
-            import {Subject} from 'rxjs'
-            S.C {
-                someevent = new Subject<boolean>()
-            }
-        }
-
-        Button.C.ts {
-            constructor(Service)
-            onactive(){
-                this.Service.someevent.next("true")
-            }
-        }
-        
-        Button.C.html {
-            <button (click)="onactive()">Click Me</button>
-        }
-
-        show.C.ts {
-            isactive = false
-            private thissub: Subcription    //import it
-            constructor(Service)
-            ngOnInit(){
-                this.Service.someevent.subcribe(res=>{
-                    this.isactive=res
-                })
-            }
-            ngOnDestroy(){
-                this.sub.unsubcribe()
-            }
-        }
-        
-    }
-
     C. ts {
         private observerSubcription: Subcription      //import it
         ngOnInit(){
@@ -750,6 +714,67 @@ Obervable {
             this.observerSubcription.unsubcribe()
         }
     }
+    
+    Subject {
+
+        Service.ts {
+            import {Subject} from 'rxjs'
+            S.C {
+                someevent = new Subject<boolean>()
+            }
+        }
+
+        Button.C.ts {
+            constructor(Service)
+            onactive(){
+                this.Service.someevent.next("true")
+            }
+        }
+        
+        Button.C.html {
+            <button (click)="onactive()">Click Me</button>
+        }
+
+        show.C.ts {
+            isactive = false
+            private thissub: Subcription    //import it
+            constructor(Service)
+            ngOnInit(){
+                this.Service.someevent.subcribe(res=>{
+                    this.isactive=res
+                })
+            }
+            ngOnDestroy(){
+                this.sub.unsubcribe()
+            }
+        }
+        
+    }
+
+    BehaviorSubject {
+        Service.ts {
+           
+            private _isloggedIn$ = new BehaviorSubject<boolean>(false)
+            isloggedIn$ = this._isloggedIn$.asObservable()
+              
+              
+            constructor(private webRequestService: WebRequeestService) {
+                  const token = localStorage.getItem('bearer')
+                  this._isloggedIn$.next(!!token)
+            }
+
+            login(obj: any) {
+                return this.webRequestService.login('auth/login', obj).pipe(
+                  tap((res: any) => {
+                    localStorage.setItem('bearer', res.token)
+                    console.log(localStorage.getItem('bearer'))
+                    this._isloggedIn$.next(true)
+                  })
+                )
+            }
+        }
+    }
+
 }
 
 Route Guard {
