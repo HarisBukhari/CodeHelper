@@ -647,20 +647,20 @@ Form {
         }
     }
     .html {
-        <form class="myFormValidationColor" [formGroup]="reactiveForm" [ngClass]="formStatus" (ngSubmit)="onSubmit()">
+        <form class="myFormValidationColor" [formGroup]="ReactiveForm" [ngClass]="formStatus" (ngSubmit)="onSubmit()">
             // For Internal Group otherwise remove group make it simple
             <div formGroupName="Details">
                 <input formControlName="firstname">
                 <input formControlName="lastname">
                 <input formControlName="email">
-                <p *ngIf="!reactiveForm.get('Details.email').valid && reactiveForm.get('Details.email').touched">This Email is not Valid</p>
+                <p *ngIf="!ReactiveForm.get('Details.email').valid && ReactiveForm.get('Details.email').touched">This Email is not Valid</p>
             </div>
             <input type="radio" formControlName="gender"> //male
             <input type="radio" formControlName="gender"> //female
             <input type="radio" formControlName="gender"> //other
 
             <div formArrayName="skills">
-                <ng-container *ngFor="let skill of ReactiveFrom.get('skills')['controls']; index as i">
+                <ng-container *ngFor="let skill of ReactiveForm.get('skills')['controls']; index as i">
                     <input type="text" formControlName="{{i}}">
                 </ng-container>
                 <button (click)="addskill()">Add More Skills</button>
@@ -668,7 +668,6 @@ Form {
             <button type="submit"></button>
         </form>
     }
-
 }
 
 Obervable {
