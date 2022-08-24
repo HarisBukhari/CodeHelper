@@ -668,6 +668,90 @@ Form {
             <button type="submit"></button>
         </form>
     }
+
+    React Dynamic Field Form {
+        C.ts {
+
+            ReactiveForm: FormGroup;
+
+            constructor() { }
+          
+            ngOnInit(): void {
+              this.ReactiveForm = new FormGroup({
+                Details: new FormGroup({
+                  title: new FormControl(null, Validators.required),
+                  start_time: new FormControl(null, Validators.required),
+                  end_time: new FormControl(null, Validators.required),
+                  location: new FormControl(null, Validators.required),
+                }),
+                sessions: new FormArray([])
+              })
+            }
+          
+            onSubmit() {
+              console.log(this.ReactiveForm) //Full Object. find value Property
+            }
+          
+            addSession() {
+              (<FormArray>this.ReactiveForm.get('sessions')).push(new FormGroup({
+                Case : new FormControl(""),
+                Participants : new FormControl(""),
+                Start_time : new FormControl(""),
+                End_time : new FormControl(""),
+                Room : new FormControl(""),
+              }))
+            }
+          
+            delete(sessionNum: number){
+              (<FormArray>this.ReactiveForm.get('sessions')).removeAt(sessionNum)
+            }
+        }
+        <!-- //this is in Angular Material  -->
+        .html {
+            <form class="myFormValidationColor" [formGroup]="ReactiveForm" (ngSubmit)="onSubmit()">
+                <div formGroupName="Details">
+                    <mat-form-field appearance="fill">
+                        <input matInput type="text" placeholder="title" formControlName="title">
+                    </mat-form-field>
+                    <mat-form-field appearance="fill">
+                        <input matInput type="text" placeholder="start_time" formControlName="start_time">
+                    </mat-form-field>
+                    <mat-form-field appearance="fill">
+                        <input matInput type="text" placeholder="End_time" formControlName="end_time">
+                    </mat-form-field>
+                    <mat-form-field appearance="fill">
+                        <input matInput type="text" placeholder="location" formControlName="location">
+                    </mat-form-field>
+                </div>
+                <button mat-raised-button (click)="addSession()">
+                    Add Session
+                </button>
+                <div formArrayName="sessions">
+                    <ng-container *ngFor="let session of ReactiveForm.get('sessions')['controls']; index as i">
+                        <div [formGroupName]="i">
+                            <mat-form-field appearance="fill">
+                                <input matInput type="text" placeholder="Case" formControlName="Case">
+                            </mat-form-field>
+                            <mat-form-field appearance="fill">
+                                <input matInput type="text" placeholder="Participants" formControlName="Participants">
+                            </mat-form-field>
+                            <mat-form-field appearance="fill">
+                                <input matInput type="text" placeholder="Start_time" formControlName="Start_time">
+                            </mat-form-field>
+                            <mat-form-field appearance="fill">
+                                <input matInput type="text" placeholder="End_time" formControlName="End_time">
+                            </mat-form-field>
+                            <mat-form-field appearance="fill">
+                                <input matInput type="text" placeholder="Room" formControlName="Room">
+                            </mat-form-field>
+                            <button mat-raised-button (click)="delete(i)">Delete</button>
+                        </div>
+                    </ng-container>
+                </div>
+                <button mat-button type="submit">Submit</button>
+            </form>
+        }
+    }
 }
 
 Obervable {
