@@ -211,6 +211,21 @@ Directives {
         }
     }
 
+    ngSwitch {
+
+        C.TS{
+            color = "red";
+        }
+        .html{
+            <ng-container [ngSwitch]="color">
+                <div *ngSwitchCase="'red'">This is Red</div>
+                <div *ngSwitchCase="'blue'">This is Blue</div>
+                <div *ngSwitchCase="'green'">This is Green</div>
+                <div *ngSwitchDefault>Pick Again</div>
+            </ng-container>
+        }
+    }
+
     ngStyle {
         C.TS{
             perosn: string = 'online'
