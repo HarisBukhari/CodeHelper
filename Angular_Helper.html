@@ -742,7 +742,7 @@ Form {
                         <input matInput type="text" placeholder="location" formControlName="location">
                     </mat-form-field>
                 </div>
-                <button mat-raised-button (click)="addSession()">
+                <button mat-raised-button (click)="addSession()" type="button"> //mention type="button" for all buttons to not to work as submit 
                     Add Session
                 </button>
                 <div formArrayName="sessions">
