@@ -131,7 +131,7 @@ Component & Data Binding {
             @ViewChild('app-child', {static:true}) child: app-child    //app-child is COMPONENT SELECTOR and Also import the component
             //@ViewChild('form') myform: NgForm | any; //This is not part of this Example! Use any when TS not happy. 
             //myform.setValue({add all properties}) can use it to add and replace data.
-            //myform.setPatch({add only properties want update}) can use it to update with less properties but code did not work.
+            //myform.setPatch({add only properties want to update}) can use it to update with less properties but code did not work.
 
             findAge(){
                 let BrthYear = new Date(this.dob.nativeElement.value).getFullYear()
