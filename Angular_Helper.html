@@ -14,6 +14,13 @@ Bootstrap-Links{
     }
 }
 
+"styles": [
+    "src/styles.css",
+    "node_modules/bootstrap/dist/css/bootstrap.min.css"
+],
+"scripts": [
+    "node_modules/bootstrap/dist/js/bootstrap.js"
+]
 
 <!-- For Strict Angular rule -->
 <!-- tsconfig.json -->
@@ -216,7 +223,7 @@ Child To Parent Binding {
             export class Person {
                 public name: string;
             constructor(name: string) {
-                    this.name=name;
+                    this.name=name; 
                 }
             }
         }
