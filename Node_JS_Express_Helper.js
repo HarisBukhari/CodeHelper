@@ -159,3 +159,15 @@ if(process.env.NODE_ENV !=="production"){
     require('dotenv').config()
 }
 console.log(process.env.somevariable)
+
+
+//Axios Req
+let options = {
+    'method': 'POST',
+    'url': 'https://third/party/api/url',
+    'headers': {
+      'X-API-KEY': 'E6xwOg2BY4RbmiJogfyegrt746r7te',
+      'Content-Type': 'application/json'
+    }
+  };
+  const result = await axios(options);
